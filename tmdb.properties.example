@@ -1,0 +1,2 @@
+# Copy to tmdb.properties (never commit secrets)
+TMDB_ACCESS_TOKEN=your_access_token

@@ -1,0 +1,3 @@
+plugins { id("amro.feature"); id("amro.hilt") }
+android { namespace = "com.amro.feature.trending" }
+dependencies { implementation(projects.application.movie); implementation(projects.domain.movie); implementation(projects.core.designsystem); implementation(libs.androidx.lifecycle.viewmodel.compose); implementation(libs.androidx.hilt.navigation.compose); implementation(libs.androidx.lifecycle.runtime.compose); implementation(libs.androidx.paging.compose); implementation(libs.coil.compose); implementation(libs.coil.network.okhttp); implementation(libs.compose.material.icons); testImplementation(projects.core.testing) }
