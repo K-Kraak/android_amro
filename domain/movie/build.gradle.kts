@@ -1,1 +1,3 @@
-plugins { id("amro.kotlin.library") }
+plugins {
+    id("amro.kotlin.library")
+}

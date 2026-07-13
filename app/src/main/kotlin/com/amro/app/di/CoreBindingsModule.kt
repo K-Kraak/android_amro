@@ -1,5 +1,7 @@
 package com.amro.app.di
 
+import com.amro.app.locale.AndroidLanguageProvider
+import com.amro.core.common.locale.LanguageProvider
 import com.amro.core.common.time.Clock
 import com.amro.core.common.time.SystemClock
 import com.amro.core.dispatchers.DefaultDispatcherProvider
@@ -25,4 +27,10 @@ abstract class CoreBindingsModule {
     abstract fun bindDispatcherProvider(
         implementation: DefaultDispatcherProvider,
     ): DispatcherProvider
+
+    @Binds
+    @Singleton
+    internal abstract fun bindLanguageProvider(
+        implementation: AndroidLanguageProvider,
+    ): LanguageProvider
 }

@@ -155,8 +155,7 @@ internal class MovieRepositoryImpl @Inject constructor(
 
             fetchedPages++
 
-            val remainingCapacity =
-                policy.maximumMovies - movies.size
+            val remainingCapacity = policy.maximumMovies - movies.size
 
             movies += response.movies
                 .take(remainingCapacity)
@@ -167,10 +166,7 @@ internal class MovieRepositoryImpl @Inject constructor(
                     )
                 }
 
-            val hasReachedLastPage =
-                response.movies.isEmpty() ||
-                        page >= response.totalPages
-
+            val hasReachedLastPage = response.movies.isEmpty() || page >= response.totalPages
             if (hasReachedLastPage) {
                 break
             }

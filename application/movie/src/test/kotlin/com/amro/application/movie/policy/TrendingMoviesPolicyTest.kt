@@ -10,7 +10,7 @@ import kotlin.time.Duration.Companion.days
 
 class TrendingMoviesPolicyTest {
     private val now = Instant.parse("2026-07-10T10:00:00Z")
-    private val policy = TrendingMoviesPolicy({ now });
+    private val policy = TrendingMoviesPolicy({ now })
 
     @Test
     fun `missing trending catalog refreshes`() = assertTrue(policy.requiresRefresh(null))

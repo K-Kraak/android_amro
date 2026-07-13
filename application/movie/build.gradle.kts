@@ -5,6 +5,8 @@ dependencies {
     api(projects.domain.movie)
     api(projects.core.common)
     api(libs.androidx.paging.common)
+    implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
+
     testImplementation(projects.core.testing)
 }
