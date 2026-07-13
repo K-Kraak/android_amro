@@ -9,5 +9,5 @@ internal data class ProviderMovie(
     val genreIds: Set<String>,
     val popularity: Double,
     val releaseDate: LocalDate?,
-    val posterPath: String?,
+    val posterUrl: String?,
 )

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trending_title">Trending movies</string>
+    <string name="trending_refresh_content_description">Refresh trending movies</string>
+    <string name="trending_search_label">Search top 100</string>
+    <string name="trending_sort_popularity">Popularity</string>
+    <string name="trending_sort_title">Title</string>
+    <string name="trending_sort_release_date">Release date</string>
+    <string name="trending_empty">No movies match the current filters.</string>
+    <string name="trending_error_refresh">Trending movies could not be refreshed.</string>
+    <string name="trending_error_loading_more">More movies could not be loaded.</string>
+    <string name="trending_retry">Retry</string>
+    <string name="trending_release_unknown">Release unknown</string>
+    <string name="trending_movie_poster_content_description">Poster for %1$s</string>
+</resources>

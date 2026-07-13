@@ -1,4 +1,6 @@
-plugins { id("amro.kotlin.library") }
+plugins {
+    id("amro.kotlin.library")
+}
 dependencies {
     api(libs.junit4)
     api(libs.kotlinx.coroutines.test)

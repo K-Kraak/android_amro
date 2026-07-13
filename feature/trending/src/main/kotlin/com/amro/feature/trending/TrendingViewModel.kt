@@ -10,8 +10,11 @@ import com.amro.application.movie.usecase.GetTrendingMoviesUseCase
 import com.amro.application.movie.usecase.ObserveGenresUseCase
 import com.amro.application.movie.usecase.RefreshTrendingMoviesUseCase
 import com.amro.core.common.locale.LanguageProvider
+import com.amro.domain.movie.model.MovieProviderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -21,7 +24,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class TrendingViewModel @Inject constructor(
@@ -31,17 +33,14 @@ class TrendingViewModel @Inject constructor(
     private val languageProvider: LanguageProvider,
 ) : ViewModel() {
 
-    private val initialLanguage =
-        languageProvider.language.value.tag
-
     private val _state = MutableStateFlow(
         TrendingUiState(
             query = TrendingQuery(
-                language = initialLanguage,
+                provider = MovieProviderType.TMDB,
+                language = languageProvider.language.value.tag,
             ),
         ),
     )
-
     val state = _state.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -51,69 +50,46 @@ class TrendingViewModel @Inject constructor(
         .flatMapLatest(getTrendingMovies::invoke)
         .cachedIn(viewModelScope)
 
+    private var refreshJob: Job? = null
+
     init {
         observeGenres()
         observeLanguageChanges()
         refresh(force = false)
     }
 
-    fun search(value: String) {
-        updateQuery {
-            copy(search = value)
+    fun onSearchChanged(value: String) = updateQuery { copy(search = value) }
+
+    fun onGenreToggled(id: String) = updateQuery {
+        copy(genreIds = if (id in genreIds) genreIds - id else genreIds + id)
+    }
+
+    fun onSortSelected(field: MovieSortField) = updateQuery {
+        if (sortField == field) {
+            copy(direction = direction.toggle())
+        } else {
+            copy(sortField = field, direction = field.defaultSortDirection)
         }
     }
 
-    fun toggleGenre(id: String) {
-        updateQuery {
-            copy(
-                genreIds = if (id in genreIds) {
-                    genreIds - id
-                } else {
-                    genreIds + id
-                },
-            )
-        }
-    }
+    fun onRefreshRequested() = refresh(force = true)
+    fun onRetryRequested() = refresh(force = true)
 
-    fun sort(field: MovieSortField) {
-        updateQuery {
-            if (sortField == field) {
-                copy(
-                    direction = direction.toggle(),
-                )
-            } else {
-                copy(
-                    sortField = field,
-                    direction = field.defaultSortDirection,
-                )
-            }
-        }
-    }
-
-    fun refresh(force: Boolean = true) {
-        viewModelScope.launch {
-            val query = _state.value.query
-
+    private fun refresh(force: Boolean) {
+        refreshJob?.cancel()
+        refreshJob = viewModelScope.launch {
             _state.update {
                 it.copy(
                     refreshing = true,
-                    error = null,
+                    error = null
                 )
             }
-
-            refreshTrendingMovies(
-                query = query,
-                force = force,
-            ).onFailure { exception ->
-                _state.update {
-                    it.copy(
-                        error = exception.message ?: "Unable to refresh trending movies.",
-                    )
-                }
-            }
-
+            val result = refreshTrendingMovies(_state.value.query, force)
             _state.update {
-                it.copy(refreshing = false)
+                it.copy(
+                    refreshing = false,
+                    error = result.exceptionOrNull()?.let { TrendingUiError.RefreshFailed },
+                )
             }
         }
     }
@@ -121,62 +97,38 @@ class TrendingViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeGenres() {
         viewModelScope.launch {
-            _state
-                .map { state ->
-                    GenreQuery(
-                        provider = state.query.provider,
-                        language = state.query.language,
-                    )
-                }
-                .distinctUntilChanged()
-                .flatMapLatest { query ->
-                    observeGenres(
-                        provider = query.provider,
-                        language = query.language,
-                    )
-                }
-                .collectLatest { genres ->
-                    _state.update {
-                        it.copy(genres = genres)
-                    }
-                }
+            _state.map {
+                GenreObservationKey(it.query.provider, it.query.language)
+            }.distinctUntilChanged()
+                .flatMapLatest { observeGenres(it.provider, it.language) }
+                .collectLatest { genres -> _state.update { it.copy(genres = genres) } }
         }
     }
 
     private fun observeLanguageChanges() {
         viewModelScope.launch {
             languageProvider.language
-                .map { language -> language.tag }
+                .map { it.tag }
                 .distinctUntilChanged()
                 .drop(1)
                 .collectLatest { language ->
-                    updateQuery {
-                        copy(language = language)
-                    }
-
+                    updateQuery { copy(language = language, genreIds = emptySet()) }
                     refresh(force = false)
                 }
         }
     }
 
-    private fun updateQuery(
-        transform: TrendingQuery.() -> TrendingQuery,
-    ) {
-        _state.update { state ->
-            state.copy(
-                query = state.query.transform(),
-            )
-        }
+    private fun updateQuery(transform: TrendingQuery.() -> TrendingQuery) {
+        _state.update { it.copy(query = it.query.transform()) }
     }
 
-    private fun SortDirection.toggle(): SortDirection =
-        when (this) {
-            SortDirection.ASCENDING -> SortDirection.DESCENDING
-            SortDirection.DESCENDING -> SortDirection.ASCENDING
-        }
+    private fun SortDirection.toggle() = when (this) {
+        SortDirection.ASCENDING -> SortDirection.DESCENDING
+        SortDirection.DESCENDING -> SortDirection.ASCENDING
+    }
 
-    private data class GenreQuery(
-        val provider: com.amro.domain.movie.model.MovieProviderType,
+    private data class GenreObservationKey(
+        val provider: MovieProviderType,
         val language: String,
     )
 }

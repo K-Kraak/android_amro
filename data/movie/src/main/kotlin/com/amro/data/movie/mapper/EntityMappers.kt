@@ -36,7 +36,7 @@ internal fun ProviderMovie.toEntity(
         genreIds = genreIds.sorted().joinToString(","),
         popularity = popularity,
         releaseDate = releaseDate?.toString(),
-        posterUrl = posterPath,
+        posterUrl = posterUrl,
     )
 
 fun MovieEntity.toDomain() = Movie(

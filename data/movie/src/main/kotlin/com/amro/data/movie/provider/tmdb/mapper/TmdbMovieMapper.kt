@@ -23,7 +23,7 @@ private fun TmdbMovieDto.toProviderMovie(): ProviderMovie =
         releaseDate = releaseDate.toLocalDateOrNull(),
         // TODO: @Koen should not be hardcoded but instead be based on image sizes
         //  in the configuration object
-        posterPath = "https://image.tmdb.org/t/p/w500$posterPath",
+        posterUrl = "https://image.tmdb.org/t/p/w500$posterPath",
         genreIds = genreIds.mapTo(mutableSetOf()) { it.toString() },
     )
 

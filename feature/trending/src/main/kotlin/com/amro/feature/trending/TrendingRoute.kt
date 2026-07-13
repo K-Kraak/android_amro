@@ -2,26 +2,27 @@ package com.amro.feature.trending
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.amro.domain.movie.model.Movie
+import com.amro.domain.movie.model.MovieIdentifier
 
-// TODO: @Koen fix deprecated hiltViewModel usage
 @Composable
 fun TrendingRoute(
-    onMovieClicked: (movie: Movie) -> Unit,
-    vm: TrendingViewModel = hiltViewModel(),
+    viewModel: TrendingViewModel = hiltViewModel(),
+    onMovieClick: (movieId: MovieIdentifier) -> Unit,
 ) {
-    val state by vm.state.collectAsStateWithLifecycle()
-    val movies = vm.movies.collectAsLazyPagingItems()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val movies = viewModel.movies.collectAsLazyPagingItems()
+
     TrendingScreen(
         state = state,
         movies = movies,
-        refresh = vm::refresh,
-        toggleGenre = vm::toggleGenre,
-        searchQueryChange = vm::search,
-        sort = vm::sort,
-        onMovieClicked = onMovieClicked,
+        onSearchChanged = viewModel::onSearchChanged,
+        onGenreToggled = viewModel::onGenreToggled,
+        onSortSelected = viewModel::onSortSelected,
+        onRefreshClick = viewModel::onRefreshRequested,
+        onRetryClick = viewModel::onRetryRequested,
+        onMovieClick = onMovieClick,
     )
 }

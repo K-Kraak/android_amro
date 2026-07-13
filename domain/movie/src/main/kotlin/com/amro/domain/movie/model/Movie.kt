@@ -3,7 +3,7 @@ package com.amro.domain.movie.model
 import java.time.LocalDate
 
 data class Movie(
-    val identifier: MovieIdentifier,
+    val id: MovieIdentifier,
     val title: String,
     val overview: String,
     val posterUrl: String?,
