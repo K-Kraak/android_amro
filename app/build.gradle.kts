@@ -2,6 +2,7 @@ plugins {
     id("amro.android.application")
     id("amro.compose")
     id("amro.hilt")
+    alias(libs.plugins.kotlin.serialization)
 }
 android {
     namespace = "com.amro.app"
@@ -13,6 +14,7 @@ android {
 }
 dependencies {
     implementation(projects.feature.trending)
+    implementation(projects.domain.movie)
     implementation(projects.data.movie)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
