@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.amro.domain.movie.model.MovieProviderType
+import com.amro.feature.details.navigation.movieDetailsScreen
+import com.amro.feature.details.navigation.navigateToMovieDetails
 import com.amro.feature.trending.navigation.TrendingDestination
 import com.amro.feature.trending.navigation.trendingScreen
 
@@ -19,8 +22,11 @@ fun AmroNavHost(
     ) {
         trendingScreen(
             onMovieClick = { movieId ->
-                // navController.navigate(MovieDetailsDestination(movieId))
+                navController.navigateToMovieDetails(movieId)
             },
+        )
+        movieDetailsScreen(
+            onBackClick = navController::navigateUp
         )
     }
 }

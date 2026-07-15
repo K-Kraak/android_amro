@@ -41,6 +41,7 @@
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/movie" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/details" />
             <option value="$PROJECT_DIR$/feature/trending" />
           </set>
         </option>

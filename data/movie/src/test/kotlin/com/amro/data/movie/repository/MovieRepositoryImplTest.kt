@@ -9,6 +9,7 @@ import com.amro.data.movie.provider.MovieProvider
 import com.amro.data.movie.provider.MovieProviderRegistry
 import com.amro.data.movie.provider.model.ProviderGenre
 import com.amro.data.movie.provider.model.ProviderMovie
+import com.amro.data.movie.provider.model.ProviderMovieDetails
 import com.amro.data.movie.provider.model.ProviderMoviePage
 import com.amro.domain.movie.model.MovieProviderType
 import io.mockk.coVerify
@@ -122,6 +123,10 @@ class MovieRepositoryImplTest {
             requestedPages += page
             check(page != failurePage) { "Provider failure for page $page" }
             return requireNotNull(pages[page])
+        }
+
+        override suspend fun details(movieId: String, language: String): ProviderMovieDetails {
+            return mockk()
         }
     }
 

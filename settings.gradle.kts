@@ -33,5 +33,6 @@ include(
     ":domain:movie",
     ":application:movie",
     ":data:movie",
+    ":feature:details",
     ":feature:trending",
 )

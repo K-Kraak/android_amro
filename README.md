@@ -7,13 +7,7 @@ It demonstrates the way I think and would build an application.
 
 In the next sprint to ensure the quality, the focus should be on:
 - Additional unit tests
-- Defining common UI components (design system) that will be shared over multiple features
-- Proper implementation for the TrendingScreen instead of the AI generated UI.
-  - Proper use of constants for dimensions and shared UI components
-  - Localization in String resources
-  - Empty state (Respecting search / loading)
-  - Error state with proper error mapping
-- The detail page
+- Proper implementation for the UI containing all required fields from the assignment
 - UI tests
 
 ## Run

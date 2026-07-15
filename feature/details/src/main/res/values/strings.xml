@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="movie_details_title">Movie details</string>
+    <string name="movie_details_back">Back</string>
+    <string name="movie_details_refresh">Refresh movie details</string>
+    <string name="movie_details_retry">Retry</string>
+    <string name="movie_details_error">Movie details could not be loaded.</string>
+    <string name="movie_details_overview">Overview</string>
+    <string name="movie_details_overview_missing">No overview is available.</string>
+    <string name="movie_details_genres">Genres</string>
+    <string name="movie_details_release_unknown">Release unknown</string>
+    <string name="movie_details_runtime_minutes">%1$d min</string>
+    <string name="movie_details_rating">Rating %1$.1f</string>
+    <string name="movie_details_backdrop_description">Backdrop for %1$s</string>
+</resources>

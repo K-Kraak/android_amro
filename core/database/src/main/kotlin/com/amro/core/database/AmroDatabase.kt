@@ -6,13 +6,16 @@ import androidx.room.Transaction
 import com.amro.core.database.dao.CatalogMetadataDao
 import com.amro.core.database.dao.GenreDao
 import com.amro.core.database.dao.MovieDao
+import com.amro.core.database.dao.MovieDetailsDao
 import com.amro.core.database.entity.CatalogMetadataEntity
 import com.amro.core.database.entity.GenreEntity
+import com.amro.core.database.entity.MovieDetailsEntity
 import com.amro.core.database.entity.MovieEntity
 
 @Database(
     entities = [
         MovieEntity::class,
+        MovieDetailsEntity::class,
         GenreEntity::class,
         CatalogMetadataEntity::class,
     ],
@@ -21,6 +24,7 @@ import com.amro.core.database.entity.MovieEntity
 )
 abstract class AmroDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
+    abstract fun movieDetailsDao(): MovieDetailsDao
     abstract fun genreDao(): GenreDao
     abstract fun catalogMetadataDao(): CatalogMetadataDao
 

@@ -13,6 +13,7 @@ android {
     }
 }
 dependencies {
+    implementation(projects.feature.details)
     implementation(projects.feature.trending)
     implementation(projects.domain.movie)
     implementation(projects.data.movie)

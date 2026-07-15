@@ -21,6 +21,7 @@ import com.amro.data.movie.mapper.toSQLiteQuery
 import com.amro.data.movie.provider.MovieProvider
 import com.amro.data.movie.provider.MovieProviderRegistry
 import com.amro.domain.movie.model.Movie
+import com.amro.domain.movie.model.MovieIdentifier
 import com.amro.domain.movie.model.MovieProviderType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -35,6 +36,22 @@ internal class MovieRepositoryImpl @Inject constructor(
     private val dispatchers: DispatcherProvider,
 ) : MovieRepository {
 
+    override fun observeMovieDetails(id: MovieIdentifier, language: String) =
+        db.movieDetailsDao()
+            .observe(id.provider.id, id.value, language)
+            .map { it?.toDomain() }
+
+    override suspend fun refreshMovieDetails(
+        id: MovieIdentifier,
+        language: String,
+    ) : Unit = withContext(dispatchers.io) {
+        val provider = providerRegistry.require(id.provider)
+        val details = provider.details(id.value, language)
+        require(details.id == id.value)
+        db.movieDetailsDao().upsert(
+            details.toEntity(id.provider, language, clock.now()),
+        )
+    }
 
     override fun trending(query: TrendingQuery): Flow<PagingData<Movie>> {
         val paging = Pager(

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="movie_details_title">Filmdetails</string>
+    <string name="movie_details_back">Terug</string>
+    <string name="movie_details_refresh">Filmdetails vernieuwen</string>
+    <string name="movie_details_retry">Opnieuw proberen</string>
+    <string name="movie_details_error">De filmdetails konden niet worden geladen.</string>
+    <string name="movie_details_overview">Omschrijving</string>
+    <string name="movie_details_overview_missing">Er is geen omschrijving beschikbaar.</string>
+    <string name="movie_details_genres">Genres</string>
+    <string name="movie_details_release_unknown">Releasedatum onbekend</string>
+    <string name="movie_details_runtime_minutes">%1$d min</string>
+    <string name="movie_details_rating">Beoordeling %1$.1f</string>
+    <string name="movie_details_backdrop_description">Achtergrondafbeelding van %1$s</string>
+</resources>
