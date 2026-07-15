@@ -18,6 +18,10 @@ In the next sprint to ensure the quality, the focus should be on:
 The first launch fetches up to 100 trending movies from TMDB. Room is the source of truth. Search, genre filtering and sorting operate locally over the stored provider/locale-specific catalog.
 
 ## Architecture
-`domain:movie` is framework-free. `application:movie` intentionally exposes `PagingData` and owns repository contracts, use cases and freshness policy. `data:movie` implements provider-aware persistence and the TMDB provider. `feature:trending` owns presentation.
+`domain:movie` is framework-free. 
+`application:movie` intentionally exposes `PagingData` and owns repository contracts, use cases and freshness policy. 
+`data:movie` implements provider-aware persistence and the TMDB provider. 
+`feature:trending` owns presentation for the Trending page.
+`feature:details` owns presentation for the Details page.
 
 See `docs/architecture` for relevant ADRs.
